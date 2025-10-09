@@ -1,0 +1,802 @@
+[
+  {
+    "name": "VieON",
+    "icon": "assets/icons/brand/vieon.png",
+    "price": 45000,
+    "currency": "VND",
+    "note": "Gói VIP",
+    "domain": "vieon.vn"
+  },
+  {
+    "name": "FPT Play",
+    "icon": "assets/icons/brand/fpt_play.png",
+    "price": 70000,
+    "currency": "VND",
+    "note": "Gói VIP",
+    "domain": "fptplay.vn"
+  },
+  {
+    "name": "VTV Go",
+    "icon": "assets/icons/brand/vtv_go.png",
+    "price": 30000,
+    "currency": "VND",
+    "note": "Gói Premium",
+    "domain": "vtvgo.vn"
+  },
+  {
+    "name": "MyTV",
+    "icon": "assets/icons/brand/mytv.png",
+    "price": 50000,
+    "currency": "VND",
+    "note": "Gói Gold",
+    "domain": "mytv.com.vn"
+  },
+  {
+    "name": "Galaxy Play",
+    "icon": "assets/icons/brand/galaxy_play.png",
+    "price": 50000,
+    "currency": "VND",
+    "note": "Gói VIP",
+    "domain": "galaxyplay.vn"
+  },
+  {
+    "name": "Netflix",
+    "icon": "assets/icons/brand/netflix.png",
+    "price": 260000,
+    "currency": "VND",
+    "note": "Gói Premium",
+    "domain": "netflix.com"
+  },
+  {
+    "name": "Disney+ Hotstar",
+    "icon": "assets/icons/brand/disney__hotstar.png",
+    "price": 199000,
+    "currency": "VND",
+    "note": "Gói Premium",
+    "domain": "hotstar.com"
+  },
+  {
+    "name": "YouTube Premium",
+    "icon": "assets/icons/brand/youtube_premium.png",
+    "price": 79000,
+    "currency": "VND",
+    "note": "Cá nhân",
+    "domain": "youtube.com"
+  },
+  {
+    "name": "Prime Video",
+    "icon": "assets/icons/brand/prime_video.png",
+    "price": 2.99,
+    "currency": "USD",
+    "note": "Monthly",
+    "domain": "primevideo.com"
+  },
+  {
+    "name": "HBO Max",
+    "icon": "assets/icons/brand/hbo_max.png",
+    "price": 9.99,
+    "currency": "USD",
+    "note": "With Ads",
+    "domain": "max.com"
+  },
+  {
+    "name": "Apple TV+",
+    "icon": "assets/icons/brand/apple_tv_.png",
+    "price": 6.99,
+    "currency": "USD",
+    "note": "Monthly",
+    "domain": "tv.apple.com"
+  },
+  {
+    "name": "Spotify",
+    "icon": "assets/icons/brand/spotify.png",
+    "price": 59000,
+    "currency": "VND",
+    "note": "Premium Individual",
+    "domain": "spotify.com"
+  },
+  {
+    "name": "Zing MP3",
+    "icon": "assets/icons/brand/zing_mp3.png",
+    "price": 30000,
+    "currency": "VND",
+    "note": "Gói VIP",
+    "domain": "zingmp3.vn"
+  },
+  {
+    "name": "NhacCuaTui",
+    "icon": "assets/icons/brand/nhaccuatui.png",
+    "price": 30000,
+    "currency": "VND",
+    "note": "Gói VIP",
+    "domain": "nhaccuatui.com"
+  },
+  {
+    "name": "YouTube Music",
+    "icon": "assets/icons/brand/youtube_music.png",
+    "price": 49000,
+    "currency": "VND",
+    "note": "Premium",
+    "domain": "music.youtube.com"
+  },
+  {
+    "name": "Apple Music",
+    "icon": "assets/icons/brand/apple_music.png",
+    "price": 59000,
+    "currency": "VND",
+    "note": "Individual",
+    "domain": "music.apple.com"
+  },
+  {
+    "name": "SoundCloud",
+    "icon": "assets/icons/brand/soundcloud.png",
+    "price": 4.99,
+    "currency": "USD",
+    "note": "Go+",
+    "domain": "soundcloud.com"
+  },
+  {
+    "name": "JOOX",
+    "icon": "assets/icons/brand/joox.png",
+    "price": 29000,
+    "currency": "VND",
+    "note": "VIP",
+    "domain": "joox.com"
+  },
+  {
+    "name": "Grab",
+    "icon": "assets/icons/brand/grab.png",
+    "price": 30000,
+    "currency": "VND",
+    "note": "GrabUnlimited",
+    "domain": "grab.com"
+  },
+  {
+    "name": "Gojek",
+    "icon": "assets/icons/brand/gojek.png",
+    "price": 50000,
+    "currency": "VND",
+    "note": "GoClub",
+    "domain": "gojek.com"
+  },
+  {
+    "name": "Baemin",
+    "icon": "assets/icons/brand/baemin.png",
+    "price": 0,
+    "currency": "VND",
+    "note": "Free",
+    "domain": "baemin.vn"
+  },
+  {
+    "name": "Be",
+    "icon": "assets/icons/brand/be.png",
+    "price": 0,
+    "currency": "VND",
+    "note": "Free",
+    "domain": "be.com.vn"
+  },
+  {
+    "name": "MoMo",
+    "icon": "assets/icons/brand/momo.png",
+    "price": 0,
+    "currency": "VND",
+    "note": "Free",
+    "domain": "momo.vn"
+  },
+  {
+    "name": "ZaloPay",
+    "icon": "assets/icons/brand/zalopay.png",
+    "price": 0,
+    "currency": "VND",
+    "note": "Free",
+    "domain": "zalopay.vn"
+  },
+  {
+    "name": "VNPay",
+    "icon": "assets/icons/brand/vnpay.png",
+    "price": 0,
+    "currency": "VND",
+    "note": "Free",
+    "domain": "vnpay.vn"
+  },
+  {
+    "name": "ShopeePay",
+    "icon": "assets/icons/brand/shopeepay.png",
+    "price": 0,
+    "currency": "VND",
+    "note": "Free",
+    "domain": "shopee.vn"
+  },
+  {
+    "name": "Shopee",
+    "icon": "assets/icons/brand/shopee.png",
+    "price": 49000,
+    "currency": "VND",
+    "note": "ShopeeXtra",
+    "domain": "shopee.vn"
+  },
+  {
+    "name": "Lazada",
+    "icon": "assets/icons/brand/lazada.png",
+    "price": 89000,
+    "currency": "VND",
+    "note": "LazMall Plus",
+    "domain": "lazada.vn"
+  },
+  {
+    "name": "Tiki",
+    "icon": "assets/icons/brand/tiki.png",
+    "price": 0,
+    "currency": "VND",
+    "note": "Free",
+    "domain": "tiki.vn"
+  },
+  {
+    "name": "Sendo",
+    "icon": "assets/icons/brand/sendo.png",
+    "price": 0,
+    "currency": "VND",
+    "note": "Free",
+    "domain": "sendo.vn"
+  },
+  {
+    "name": "Unica",
+    "icon": "assets/icons/brand/unica.png",
+    "price": 199000,
+    "currency": "VND",
+    "note": "Gói 3 tháng",
+    "domain": "unica.vn"
+  },
+  {
+    "name": "Edumall",
+    "icon": "assets/icons/brand/edumall.png",
+    "price": 299000,
+    "currency": "VND",
+    "note": "Pro/tháng",
+    "domain": "edumall.vn"
+  },
+  {
+    "name": "PREP",
+    "icon": "assets/icons/brand/prep.png",
+    "price": 500000,
+    "currency": "VND",
+    "note": "Premium/tháng",
+    "domain": "prep.vn"
+  },
+  {
+    "name": "Duolingo",
+    "icon": "assets/icons/brand/duolingo.png",
+    "price": 149000,
+    "currency": "VND",
+    "note": "Super",
+    "domain": "duolingo.com"
+  },
+  {
+    "name": "Elsa Speak",
+    "icon": "assets/icons/brand/elsa_speak.png",
+    "price": 199000,
+    "currency": "VND",
+    "note": "Pro/tháng",
+    "domain": "elsanow.io"
+  },
+  {
+    "name": "Monkey Junior",
+    "icon": "assets/icons/brand/monkey_junior.png",
+    "price": 99000,
+    "currency": "VND",
+    "note": "Premium",
+    "domain": "monkeyjunior.com"
+  },
+  {
+    "name": "Coursera",
+    "icon": "assets/icons/brand/coursera.png",
+    "price": 49,
+    "currency": "USD",
+    "note": "Plus/month",
+    "domain": "coursera.org"
+  },
+  {
+    "name": "Udemy",
+    "icon": "assets/icons/brand/udemy.png",
+    "price": 16.58,
+    "currency": "USD",
+    "note": "Personal Plan",
+    "domain": "udemy.com"
+  },
+  {
+    "name": "Skillshare",
+    "icon": "assets/icons/brand/skillshare.png",
+    "price": 13.99,
+    "currency": "USD",
+    "note": "Premium",
+    "domain": "skillshare.com"
+  },
+  {
+    "name": "LinkedIn Learning",
+    "icon": "assets/icons/brand/linkedin_learning.png",
+    "price": 39.99,
+    "currency": "USD",
+    "note": "Monthly",
+    "domain": "linkedin.com"
+  },
+  {
+    "name": "ChatGPT Plus",
+    "icon": "assets/icons/brand/chatgpt_plus.png",
+    "price": 20,
+    "currency": "USD",
+    "note": "Plus plan",
+    "domain": "chat.openai.com"
+  },
+  {
+    "name": "GitHub Copilot",
+    "icon": "assets/icons/brand/github_copilot.png",
+    "price": 10,
+    "currency": "USD",
+    "note": "Individual",
+    "domain": "github.com"
+  },
+  {
+    "name": "Notion",
+    "icon": "assets/icons/brand/notion.png",
+    "price": 10,
+    "currency": "USD",
+    "note": "Plus plan",
+    "domain": "notion.so"
+  },
+  {
+    "name": "Evernote",
+    "icon": "assets/icons/brand/evernote.png",
+    "price": 10.83,
+    "currency": "USD",
+    "note": "Personal",
+    "domain": "evernote.com"
+  },
+  {
+    "name": "Todoist",
+    "icon": "assets/icons/brand/todoist.png",
+    "price": 4,
+    "currency": "USD",
+    "note": "Pro",
+    "domain": "todoist.com"
+  },
+  {
+    "name": "Trello",
+    "icon": "assets/icons/brand/trello.png",
+    "price": 5,
+    "currency": "USD",
+    "note": "Standard",
+    "domain": "trello.com"
+  },
+  {
+    "name": "Asana",
+    "icon": "assets/icons/brand/asana.png",
+    "price": 10.99,
+    "currency": "USD",
+    "note": "Premium",
+    "domain": "asana.com"
+  },
+  {
+    "name": "Monday.com",
+    "icon": "assets/icons/brand/monday_com.png",
+    "price": 9,
+    "currency": "USD",
+    "note": "Basic",
+    "domain": "monday.com"
+  },
+  {
+    "name": "ClickUp",
+    "icon": "assets/icons/brand/clickup.png",
+    "price": 7,
+    "currency": "USD",
+    "note": "Unlimited",
+    "domain": "clickup.com"
+  },
+  {
+    "name": "Airtable",
+    "icon": "assets/icons/brand/airtable.png",
+    "price": 20,
+    "currency": "USD",
+    "note": "Plus",
+    "domain": "airtable.com"
+  },
+  {
+    "name": "Canva Pro",
+    "icon": "assets/icons/brand/canva_pro.png",
+    "price": 299000,
+    "currency": "VND",
+    "note": "Pro/tháng",
+    "domain": "canva.com"
+  },
+  {
+    "name": "Figma",
+    "icon": "assets/icons/brand/figma.png",
+    "price": 15,
+    "currency": "USD",
+    "note": "Professional",
+    "domain": "figma.com"
+  },
+  {
+    "name": "Sketch",
+    "icon": "assets/icons/brand/sketch.png",
+    "price": 9,
+    "currency": "USD",
+    "note": "Standard",
+    "domain": "sketch.com"
+  },
+  {
+    "name": "InVision",
+    "icon": "assets/icons/brand/invision.png",
+    "price": 7.95,
+    "currency": "USD",
+    "note": "Pro",
+    "domain": "invisionapp.com"
+  },
+  {
+    "name": "Microsoft 365",
+    "icon": "assets/icons/brand/microsoft_365.png",
+    "price": 159000,
+    "currency": "VND",
+    "note": "Personal",
+    "domain": "microsoft.com"
+  },
+  {
+    "name": "OneDrive",
+    "icon": "assets/icons/brand/onedrive.png",
+    "price": 49000,
+    "currency": "VND",
+    "note": "100GB",
+    "domain": "onedrive.com"
+  },
+  {
+    "name": "Dropbox",
+    "icon": "assets/icons/brand/dropbox.png",
+    "price": 11.99,
+    "currency": "USD",
+    "note": "Plus 2TB",
+    "domain": "dropbox.com"
+  },
+  {
+    "name": "iCloud+",
+    "icon": "assets/icons/brand/icloud_.png",
+    "price": 23000,
+    "currency": "VND",
+    "note": "50GB",
+    "domain": "icloud.com"
+  },
+  {
+    "name": "pCloud",
+    "icon": "assets/icons/brand/pcloud.png",
+    "price": 9.99,
+    "currency": "USD",
+    "note": "Premium 500GB",
+    "domain": "pcloud.com"
+  },
+  {
+    "name": "Mega",
+    "icon": "assets/icons/brand/mega.png",
+    "price": 5.41,
+    "currency": "USD",
+    "note": "Pro Lite 400GB",
+    "domain": "mega.nz"
+  },
+  {
+    "name": "Garena",
+    "icon": "assets/icons/brand/garena.png",
+    "price": 50000,
+    "currency": "VND",
+    "note": "Shell/card",
+    "domain": "garena.vn"
+  },
+  {
+    "name": "Steam",
+    "icon": "assets/icons/brand/steam.png",
+    "price": 100000,
+    "currency": "VND",
+    "note": "Wallet",
+    "domain": "steampowered.com"
+  },
+  {
+    "name": "Xbox Game Pass",
+    "icon": "assets/icons/brand/xbox_game_pass.png",
+    "price": 299000,
+    "currency": "VND",
+    "note": "Ultimate",
+    "domain": "xbox.com"
+  },
+  {
+    "name": "PlayStation Plus",
+    "icon": "assets/icons/brand/playstation_plus.png",
+    "price": 349000,
+    "currency": "VND",
+    "note": "Essential",
+    "domain": "playstation.com"
+  },
+  {
+    "name": "Nintendo Switch Online",
+    "icon": "assets/icons/brand/nintendo_switch_online.png",
+    "price": 3.99,
+    "currency": "USD",
+    "note": "Individual/month",
+    "domain": "nintendo.com"
+  },
+  {
+    "name": "Epic Games",
+    "icon": "assets/icons/brand/epic_games.png",
+    "price": 0,
+    "currency": "USD",
+    "note": "Free games",
+    "domain": "epicgames.com"
+  },
+  {
+    "name": "EA Play",
+    "icon": "assets/icons/brand/ea_play.png",
+    "price": 4.99,
+    "currency": "USD",
+    "note": "Monthly",
+    "domain": "ea.com"
+  },
+  {
+    "name": "MyFitnessPal",
+    "icon": "assets/icons/brand/myfitnesspal.png",
+    "price": 9.99,
+    "currency": "USD",
+    "note": "Premium",
+    "domain": "myfitnesspal.com"
+  },
+  {
+    "name": "Strava",
+    "icon": "assets/icons/brand/strava.png",
+    "price": 7.99,
+    "currency": "USD",
+    "note": "Summit",
+    "domain": "strava.com"
+  },
+  {
+    "name": "Headspace",
+    "icon": "assets/icons/brand/headspace.png",
+    "price": 12.99,
+    "currency": "USD",
+    "note": "Monthly",
+    "domain": "headspace.com"
+  },
+  {
+    "name": "Calm",
+    "icon": "assets/icons/brand/calm.png",
+    "price": 14.99,
+    "currency": "USD",
+    "note": "Premium",
+    "domain": "calm.com"
+  },
+  {
+    "name": "Peloton",
+    "icon": "assets/icons/brand/peloton.png",
+    "price": 12.99,
+    "currency": "USD",
+    "note": "App",
+    "domain": "onepeloton.com"
+  },
+  {
+    "name": "VnExpress",
+    "icon": "assets/icons/brand/vnexpress.png",
+    "price": 0,
+    "currency": "VND",
+    "note": "Free",
+    "domain": "vnexpress.net"
+  },
+  {
+    "name": "Waka",
+    "icon": "assets/icons/brand/waka.png",
+    "price": 69000,
+    "currency": "VND",
+    "note": "VIP",
+    "domain": "waka.vn"
+  },
+  {
+    "name": "Voiz FM",
+    "icon": "assets/icons/brand/voiz_fm.png",
+    "price": 39000,
+    "currency": "VND",
+    "note": "Premium",
+    "domain": "voiz.vn"
+  },
+  {
+    "name": "Kindle Unlimited",
+    "icon": "assets/icons/brand/kindle_unlimited.png",
+    "price": 9.99,
+    "currency": "USD",
+    "note": "Unlimited",
+    "domain": "amazon.com"
+  },
+  {
+    "name": "Audible",
+    "icon": "assets/icons/brand/audible.png",
+    "price": 14.95,
+    "currency": "USD",
+    "note": "Plus",
+    "domain": "audible.com"
+  },
+  {
+    "name": "Medium",
+    "icon": "assets/icons/brand/medium.png",
+    "price": 5,
+    "currency": "USD",
+    "note": "Membership",
+    "domain": "medium.com"
+  },
+  {
+    "name": "The New York Times",
+    "icon": "assets/icons/brand/the_new_york_times.png",
+    "price": 25,
+    "currency": "USD",
+    "note": "All Access",
+    "domain": "nytimes.com"
+  },
+  {
+    "name": "Podbean",
+    "icon": "assets/icons/brand/podbean.png",
+    "price": 9,
+    "currency": "USD",
+    "note": "Unlimited Plus",
+    "domain": "podbean.com"
+  },
+  {
+    "name": "Himalaya",
+    "icon": "assets/icons/brand/himalaya.png",
+    "price": 2.99,
+    "currency": "USD",
+    "note": "Premium",
+    "domain": "himalaya.com"
+  },
+  {
+    "name": "Tinder",
+    "icon": "assets/icons/brand/tinder.png",
+    "price": 99000,
+    "currency": "VND",
+    "note": "Plus",
+    "domain": "tinder.com"
+  },
+  {
+    "name": "Bumble",
+    "icon": "assets/icons/brand/bumble.png",
+    "price": 199000,
+    "currency": "VND",
+    "note": "Premium",
+    "domain": "bumble.com"
+  },
+  {
+    "name": "Hinge",
+    "icon": "assets/icons/brand/hinge.png",
+    "price": 19.99,
+    "currency": "USD",
+    "note": "Preferred",
+    "domain": "hinge.co"
+  },
+  {
+    "name": "Zoom",
+    "icon": "assets/icons/brand/zoom.png",
+    "price": 14.99,
+    "currency": "USD",
+    "note": "Pro",
+    "domain": "zoom.us"
+  },
+  {
+    "name": "Slack",
+    "icon": "assets/icons/brand/slack.png",
+    "price": 8.75,
+    "currency": "USD",
+    "note": "Pro/user",
+    "domain": "slack.com"
+  },
+  {
+    "name": "Telegram Premium",
+    "icon": "assets/icons/brand/telegram_premium.png",
+    "price": 4.99,
+    "currency": "USD",
+    "note": "Premium",
+    "domain": "telegram.org"
+  },
+  {
+    "name": "Discord Nitro",
+    "icon": "assets/icons/brand/discord_nitro.png",
+    "price": 9.99,
+    "currency": "USD",
+    "note": "Nitro",
+    "domain": "discord.com"
+  },
+  {
+    "name": "WhatsApp Business",
+    "icon": "assets/icons/brand/whatsapp_business.png",
+    "price": 0,
+    "currency": "USD",
+    "note": "Free",
+    "domain": "whatsapp.com"
+  },
+  {
+    "name": "Zalo",
+    "icon": "assets/icons/brand/zalo.png",
+    "price": 0,
+    "currency": "VND",
+    "note": "Free",
+    "domain": "zalo.me"
+  },
+  {
+    "name": "NordVPN",
+    "icon": "assets/icons/brand/nordvpn.png",
+    "price": 11.99,
+    "currency": "USD",
+    "note": "Monthly",
+    "domain": "nordvpn.com"
+  },
+  {
+    "name": "ExpressVPN",
+    "icon": "assets/icons/brand/expressvpn.png",
+    "price": 12.95,
+    "currency": "USD",
+    "note": "Monthly",
+    "domain": "expressvpn.com"
+  },
+  {
+    "name": "1Password",
+    "icon": "assets/icons/brand/1password.png",
+    "price": 2.99,
+    "currency": "USD",
+    "note": "Individual",
+    "domain": "1password.com"
+  },
+  {
+    "name": "LastPass",
+    "icon": "assets/icons/brand/lastpass.png",
+    "price": 3,
+    "currency": "USD",
+    "note": "Premium",
+    "domain": "lastpass.com"
+  },
+  {
+    "name": "Dashlane",
+    "icon": "assets/icons/brand/dashlane.png",
+    "price": 4.99,
+    "currency": "USD",
+    "note": "Premium",
+    "domain": "dashlane.com"
+  },
+  {
+    "name": "Norton 360",
+    "icon": "assets/icons/brand/norton_360.png",
+    "price": 9.99,
+    "currency": "USD",
+    "note": "Standard",
+    "domain": "norton.com"
+  },
+  {
+    "name": "Agoda",
+    "icon": "assets/icons/brand/agoda.png",
+    "price": 0,
+    "currency": "VND",
+    "note": "Free booking",
+    "domain": "agoda.com"
+  },
+  {
+    "name": "Booking.com",
+    "icon": "assets/icons/brand/booking_com.png",
+    "price": 0,
+    "currency": "USD",
+    "note": "Free",
+    "domain": "booking.com"
+  },
+  {
+    "name": "Airbnb",
+    "icon": "assets/icons/brand/airbnb.png",
+    "price": 0,
+    "currency": "USD",
+    "note": "Free",
+    "domain": "airbnb.com"
+  },
+  {
+    "name": "Traveloka",
+    "icon": "assets/icons/brand/traveloka.png",
+    "price": 0,
+    "currency": "VND",
+    "note": "Free",
+    "domain": "traveloka.com"
+  }
+]
