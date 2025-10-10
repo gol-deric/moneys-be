@@ -27,7 +27,9 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->brandName('MoneyS Admin')
+            ->brandName('MoneyS')
+            ->brandLogo(asset('assets/logo.png'))
+            ->brandLogoHeight('3rem')
             ->colors([
                 'primary' => Color::Green,
                 'success' => Color::Green,
