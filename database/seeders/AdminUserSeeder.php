@@ -13,18 +13,22 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'email' => 'admin@moneys.com',
-            'password' => Hash::make('password'),
-            'full_name' => 'Admin User',
-            'is_guest' => false,
-            'subscription_tier' => 'enterprise',
-            'notifications_enabled' => true,
-            'email_notifications' => true,
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@moneys.com'],
+            [
+                'password' => Hash::make('password'),
+                'full_name' => 'Admin User',
+                'is_guest' => false,
+                'is_admin' => true,
+                'subscription_tier' => 'pro',
+                'notifications_enabled' => true,
+                'email_notifications' => true,
+            ]
+        );
 
-        $this->command->info('Admin user created successfully!');
+        $this->command->info('Admin user created/updated successfully!');
         $this->command->info('Email: admin@moneys.com');
         $this->command->info('Password: password');
+        $this->command->info('Admin access: YES');
     }
 }

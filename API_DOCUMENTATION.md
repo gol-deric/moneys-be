@@ -4,6 +4,12 @@
 
 **Authentication**: Bearer Token (Laravel Sanctum)
 
+**Subscription Tiers**:
+- **FREE**: 3 subscriptions max, 1 day notification
+- **PRO**: Unlimited subscriptions, custom notifications, reports, export ($10/year)
+
+📋 **[Tier System API Documentation](TIER_SYSTEM_API.md)** - Chi tiết về FREE vs PRO
+
 ---
 
 ## 🔐 Authentication
@@ -186,8 +192,8 @@ Lấy thông tin user đang đăng nhập.
   "full_name": "John Doe",
   "avatar_url": null,
   "is_guest": false,
-  "locale": "en",
-  "currency_code": "USD",
+  "language": "en",
+  "currency": "USD",
   "theme": "light",
   "notifications_enabled": true,
   "email_notifications": true,
@@ -215,8 +221,8 @@ Cập nhật thông tin user.
 {
   "full_name": "New Name",
   "avatar_url": "https://example.com/avatar.jpg",
-  "locale": "vi",
-  "currency_code": "VND",
+  "language": "vi",
+  "currency": "VND",
   "theme": "dark",
   "notifications_enabled": false,
   "email_notifications": true
@@ -280,9 +286,83 @@ Cập nhật Firebase Cloud Messaging token cho push notifications.
 
 ---
 
+### 11. Get Tier Information ⭐ NEW
+**GET** `/users/tier-info` 🔒
+
+Lấy thông tin tier hiện tại, limits và usage.
+
+**Response** (200 OK):
+```json
+{
+  "current_tier": "free",
+  "limits": {
+    "max_subscriptions": 3,
+    "notification_days_before": [1],
+    "can_customize_notifications": false,
+    "can_export": false,
+    "can_view_reports": false,
+    "history_days": 30
+  },
+  "usage": {
+    "subscriptions": {
+      "current": 2,
+      "max": 3,
+      "percentage": 66.67
+    }
+  },
+  "can_upgrade": true,
+  "subscription_expires_at": null
+}
+```
+
+**cURL Example:**
+```bash
+curl http://localhost:8000/api/v1/users/tier-info \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+📋 **Chi tiết**: Xem [TIER_SYSTEM_API.md](TIER_SYSTEM_API.md#1-get-tier-information)
+
+---
+
+### 12. Upgrade to PRO ⭐ NEW
+**POST** `/users/upgrade-to-pro` 🔒
+
+Nâng cấp lên PRO tier ($10/năm).
+
+**Response** (200 OK):
+```json
+{
+  "message": "Successfully upgraded to PRO",
+  "user": {
+    "subscription_tier": "pro",
+    "subscription_expires_at": "2026-10-10T00:00:00.000000Z",
+    ...
+  }
+}
+```
+
+**Response** (400 - Already PRO):
+```json
+{
+  "error": "Already on PRO tier",
+  "message": "You are already a PRO user."
+}
+```
+
+**cURL Example:**
+```bash
+curl -X POST http://localhost:8000/api/v1/users/upgrade-to-pro \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+📋 **Chi tiết**: Xem [TIER_SYSTEM_API.md](TIER_SYSTEM_API.md#2-upgrade-to-pro)
+
+---
+
 ## 💳 Subscriptions
 
-### 11. List Subscriptions
+### 13. List Subscriptions
 **GET** `/subscriptions` 🔒
 
 Lấy danh sách subscriptions với filters và pagination.
@@ -302,7 +382,7 @@ Lấy danh sách subscriptions với filters và pagination.
       "name": "Netflix",
       "icon_url": "https://...",
       "price": "15.99",
-      "currency_code": "USD",
+      "currency": "USD",
       "start_date": "2025-01-01",
       "billing_cycle_count": 1,
       "billing_cycle_period": "month",
@@ -334,7 +414,7 @@ curl "http://localhost:8000/api/v1/subscriptions?is_cancelled=true" \
 
 ---
 
-### 12. Create Subscription
+### 14. Create Subscription ⭐ UPDATED
 **POST** `/subscriptions` 🔒
 
 Tạo subscription mới.
@@ -345,7 +425,7 @@ Tạo subscription mới.
   "name": "Netflix",
   "icon_url": "https://example.com/netflix.png",
   "price": 15.99,
-  "currency_code": "USD",
+  "currency": "USD",
   "start_date": "2025-01-01",
   "billing_cycle_count": 1,
   "billing_cycle_period": "month",
@@ -374,6 +454,18 @@ Tạo subscription mới.
 }
 ```
 
+**Response** (403 - FREE Tier Limit Reached):
+```json
+{
+  "error": "Subscription limit reached",
+  "message": "You have reached the maximum limit of 3 subscriptions for the Free plan. Upgrade to PRO for unlimited subscriptions.",
+  "current_tier": "free",
+  "current_count": 3,
+  "limit": 3,
+  "upgrade_required": true
+}
+```
+
 **cURL Example:**
 ```bash
 curl -X POST http://localhost:8000/api/v1/subscriptions \
@@ -382,7 +474,7 @@ curl -X POST http://localhost:8000/api/v1/subscriptions \
   -d '{
     "name": "Netflix",
     "price": 15.99,
-    "currency_code": "USD",
+    "currency": "USD",
     "start_date": "2025-01-01",
     "billing_cycle_count": 1,
     "billing_cycle_period": "month",
@@ -390,9 +482,13 @@ curl -X POST http://localhost:8000/api/v1/subscriptions \
   }'
 ```
 
+**Note**: FREE users bị giới hạn 3 subscriptions. PRO users unlimited.
+
+📋 **Chi tiết**: Xem [TIER_SYSTEM_API.md](TIER_SYSTEM_API.md#3-create-subscription-with-limit-check)
+
 ---
 
-### 13. Get Subscription Statistics
+### 15. Get Subscription Statistics
 **GET** `/subscriptions/stats` 🔒
 
 Lấy thống kê chi tiêu subscription.
@@ -421,7 +517,7 @@ curl http://localhost:8000/api/v1/subscriptions/stats \
 
 ---
 
-### 14. Get Single Subscription
+### 16. Get Single Subscription
 **GET** `/subscriptions/{id}` 🔒
 
 Lấy chi tiết 1 subscription.
@@ -439,7 +535,7 @@ Lấy chi tiết 1 subscription.
 
 ---
 
-### 15. Update Subscription
+### 17. Update Subscription
 **PATCH** `/subscriptions/{id}` 🔒
 
 Cập nhật subscription.
@@ -465,7 +561,7 @@ Cập nhật subscription.
 
 ---
 
-### 16. Delete Subscription
+### 18. Delete Subscription
 **DELETE** `/subscriptions/{id}` 🔒
 
 Xóa subscription (soft delete).
@@ -479,7 +575,7 @@ Xóa subscription (soft delete).
 
 ---
 
-### 17. Cancel Subscription
+### 19. Cancel Subscription
 **POST** `/subscriptions/{id}/cancel` 🔒
 
 Đánh dấu subscription là cancelled (không xóa).
@@ -507,7 +603,7 @@ curl -X POST http://localhost:8000/api/v1/subscriptions/uuid-here/cancel \
 
 ## 📅 Calendar
 
-### 18. Get Calendar View
+### 20. Get Calendar View
 **GET** `/calendar/{year}/{month}` 🔒
 
 Lấy subscriptions grouped by ngày billing trong tháng.
@@ -530,7 +626,7 @@ Lấy subscriptions grouped by ngày billing trong tháng.
           "name": "Netflix",
           "icon_url": "...",
           "price": "15.99",
-          "currency_code": "USD",
+          "currency": "USD",
           "category": "Entertainment"
         }
       ]
@@ -554,7 +650,7 @@ curl http://localhost:8000/api/v1/calendar/2025/10 \
 
 ## 🔔 Notifications
 
-### 19. List Notifications
+### 21. List Notifications
 **GET** `/notifications` 🔒
 
 Lấy danh sách notifications.
@@ -595,7 +691,7 @@ curl "http://localhost:8000/api/v1/notifications?is_read=false" \
 
 ---
 
-### 20. Mark Notification as Read
+### 22. Mark Notification as Read
 **PATCH** `/notifications/{id}/read` 🔒
 
 Đánh dấu notification đã đọc.
@@ -684,7 +780,7 @@ curl -X POST http://localhost:8000/api/v1/subscriptions \
   -d '{
     "name": "Netflix",
     "price": 15.99,
-    "currency_code": "USD",
+    "currency": "USD",
     "start_date": "2025-01-01",
     "billing_cycle_count": 1,
     "billing_cycle_period": "month",

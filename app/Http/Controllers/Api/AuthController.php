@@ -18,17 +18,25 @@ class AuthController extends Controller
      */
     public function register(Request $request): JsonResponse
     {
-        $request->validate([
+        $isGuest = $request->boolean('is_guest', false);
+
+        $rules = [
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8',
             'full_name' => 'required|string|max:255',
-        ]);
+        ];
+
+        // If not a guest user, password is required
+        if (!$isGuest) {
+            $rules['password'] = 'required|string|min:8';
+        }
+
+        $request->validate($rules);
 
         $user = User::create([
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make($isGuest ? 'Moneys@2025' : $request->password),
             'full_name' => $request->full_name,
-            'is_guest' => false,
+            'is_guest' => $isGuest,
         ]);
 
         $token = $user->createToken('auth-token')->plainTextToken;

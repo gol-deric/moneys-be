@@ -25,9 +25,10 @@ class User extends Authenticatable
         'full_name',
         'avatar_url',
         'is_guest',
+        'is_admin',
         'fcm_token',
-        'locale',
-        'currency_code',
+        'language',
+        'currency',
         'theme',
         'notifications_enabled',
         'email_notifications',
@@ -56,6 +57,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_guest' => 'boolean',
+            'is_admin' => 'boolean',
             'notifications_enabled' => 'boolean',
             'email_notifications' => 'boolean',
             'subscription_expires_at' => 'datetime',
@@ -87,6 +89,22 @@ class User extends Authenticatable
     }
 
     /**
+     * Get all purchases for the user.
+     */
+    public function purchases(): HasMany
+    {
+        return $this->hasMany(Purchase::class);
+    }
+
+    /**
+     * Get all device tokens for the user.
+     */
+    public function deviceTokens(): HasMany
+    {
+        return $this->hasMany(DeviceToken::class);
+    }
+
+    /**
      * Get the user's name for Filament.
      * This maps full_name to name for compatibility.
      */
@@ -101,5 +119,13 @@ class User extends Authenticatable
     public function getFilamentName(): string
     {
         return $this->full_name ?? $this->email ?? 'User';
+    }
+
+    /**
+     * Determine if the user can access the Filament admin panel.
+     */
+    public function canAccessPanel(\Filament\Panel $panel): bool
+    {
+        return $this->is_admin === true;
     }
 }
