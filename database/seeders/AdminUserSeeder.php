@@ -16,7 +16,7 @@ class AdminUserSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'admin@moneys.com'],
             [
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Thuong99@'),
                 'full_name' => 'Admin User',
                 'is_guest' => false,
                 'is_admin' => true,
@@ -28,7 +28,7 @@ class AdminUserSeeder extends Seeder
 
         $this->command->info('Admin user created/updated successfully!');
         $this->command->info('Email: admin@moneys.com');
-        $this->command->info('Password: password');
+        $this->command->info('Password: Thuong99@');
         $this->command->info('Admin access: YES');
     }
 }
