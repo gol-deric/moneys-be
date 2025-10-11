@@ -34,6 +34,8 @@ class User extends Authenticatable
         'email_notifications',
         'subscription_tier',
         'subscription_expires_at',
+        'device_id',
+        'last_logged_in',
     ];
 
     /**
@@ -61,6 +63,7 @@ class User extends Authenticatable
             'notifications_enabled' => 'boolean',
             'email_notifications' => 'boolean',
             'subscription_expires_at' => 'datetime',
+            'last_logged_in' => 'datetime',
         ];
     }
 

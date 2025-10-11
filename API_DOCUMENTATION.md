@@ -4,6 +4,8 @@
 
 **Authentication**: Bearer Token (Laravel Sanctum)
 
+**API Security**: All requests require `X-API-Key` header
+
 **Subscription Tiers**:
 - **FREE**: 3 subscriptions max, 1 day notification
 - **PRO**: Unlimited subscriptions, custom notifications, reports, export ($10/year)
@@ -12,23 +14,75 @@
 
 ---
 
+## 🔑 API Security Key
+
+**IMPORTANT**: All API requests must include the `X-API-Key` header for security.
+
+```bash
+X-API-Key: YOUR_API_SECURITY_KEY
+```
+
+### Where to get the API Key:
+- The API key is configured in the backend `.env` file as `API_SECURITY_KEY`
+- Contact your backend administrator to get the key
+- Store the key securely in your mobile app (use secure storage, not hardcoded)
+
+### Example Request:
+```bash
+curl -X POST http://localhost:8000/api/v1/register \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: YOUR_API_SECURITY_KEY" \
+  -d '{
+    "email": "user@example.com",
+    "password": "password123",
+    "full_name": "John Doe"
+  }'
+```
+
+### Error Response (Missing or Invalid Key):
+**401 Unauthorized**
+```json
+{
+  "error": "Unauthorized",
+  "message": "Invalid or missing API security key."
+}
+```
+
+### Security Best Practices:
+- ✅ Store API key in secure storage (iOS Keychain, Android KeyStore)
+- ✅ Use ProGuard/R8 obfuscation for Android apps
+- ✅ Implement certificate pinning for HTTPS connections
+- ❌ Never hardcode the API key in source code
+- ❌ Never expose the key in public repositories
+- ❌ Never log the API key in production
+
+---
+
 ## 🔐 Authentication
 
 ### 1. Register User
 **POST** `/register`
 
-Tạo tài khoản user mới.
+Tạo tài khoản user mới. Nếu có `device_id` trùng với guest account, tự động upgrade guest account thành tài khoản thật.
 
 **Request Body:**
 ```json
 {
   "email": "user@example.com",
   "password": "password123",
-  "full_name": "John Doe"
+  "full_name": "John Doe",
+  "device_id": "unique-device-id-12345"
 }
 ```
 
-**Response** (201 Created):
+**Fields:**
+- `email` (required): Email address
+- `password` (required): Password (min 8 characters)
+- `full_name` (required): User's full name
+- `device_id` (optional): Device identifier for guest account merging
+- `is_guest` (optional): Set to `true` to create guest account without password
+
+**Response** (201 Created - New Account):
 ```json
 {
   "user": {
@@ -36,9 +90,27 @@ Tạo tài khoản user mới.
     "email": "user@example.com",
     "full_name": "John Doe",
     "is_guest": false,
+    "device_id": "unique-device-id-12345",
+    "last_logged_in": "2025-10-11T10:00:00.000000Z",
     "subscription_tier": "free"
   },
   "token": "1|xxxxxxxxxxxxxxxxxxxx"
+}
+```
+
+**Response** (200 OK - Guest Account Upgraded):
+```json
+{
+  "user": {
+    "id": "existing-guest-uuid",
+    "email": "user@example.com",
+    "full_name": "John Doe",
+    "is_guest": false,
+    "device_id": "unique-device-id-12345",
+    "last_logged_in": "2025-10-11T10:00:00.000000Z"
+  },
+  "token": "1|xxxxxxxxxxxxxxxxxxxx",
+  "message": "Guest account upgraded successfully"
 }
 ```
 
@@ -46,10 +118,25 @@ Tạo tài khoản user mới.
 ```bash
 curl -X POST http://localhost:8000/api/v1/register \
   -H "Content-Type: application/json" \
+  -H "X-API-Key: YOUR_API_SECURITY_KEY" \
   -d '{
     "email": "user@example.com",
     "password": "password123",
-    "full_name": "John Doe"
+    "full_name": "John Doe",
+    "device_id": "unique-device-id-12345"
+  }'
+```
+
+**Guest Account Registration:**
+```bash
+curl -X POST http://localhost:8000/api/v1/register \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: YOUR_API_SECURITY_KEY" \
+  -d '{
+    "email": "guest@example.com",
+    "full_name": "Guest User",
+    "is_guest": true,
+    "device_id": "unique-device-id-12345"
   }'
 ```
 
@@ -58,20 +145,33 @@ curl -X POST http://localhost:8000/api/v1/register \
 ### 2. Login
 **POST** `/login`
 
-Đăng nhập và nhận token.
+Đăng nhập và nhận token. Tự động cập nhật `last_logged_in` và `device_id`.
 
 **Request Body:**
 ```json
 {
   "email": "user@example.com",
-  "password": "password123"
+  "password": "password123",
+  "device_id": "unique-device-id-12345"
 }
 ```
+
+**Fields:**
+- `email` (required): Email address
+- `password` (required): Password
+- `device_id` (optional): Device identifier to track user's device
 
 **Response** (200 OK):
 ```json
 {
-  "user": { ... },
+  "user": {
+    "id": "uuid",
+    "email": "user@example.com",
+    "full_name": "John Doe",
+    "device_id": "unique-device-id-12345",
+    "last_logged_in": "2025-10-11T10:30:00.000000Z",
+    "subscription_tier": "free"
+  },
   "token": "2|xxxxxxxxxxxxxxxxxxxx"
 }
 ```
@@ -80,9 +180,11 @@ curl -X POST http://localhost:8000/api/v1/register \
 ```bash
 curl -X POST http://localhost:8000/api/v1/login \
   -H "Content-Type: application/json" \
+  -H "X-API-Key: YOUR_API_SECURITY_KEY" \
   -d '{
     "email": "user@example.com",
-    "password": "password123"
+    "password": "password123",
+    "device_id": "unique-device-id-12345"
   }'
 ```
 
@@ -91,27 +193,64 @@ curl -X POST http://localhost:8000/api/v1/login \
 ### 3. Create Guest Account
 **POST** `/guest`
 
-Tạo tài khoản khách tạm thời.
+Tạo tài khoản khách tạm thời. Nếu `device_id` đã tồn tại cho guest account khác, trả về account đó thay vì tạo mới.
 
-**Request Body:** (none)
+**Request Body:**
+```json
+{
+  "device_id": "unique-device-id-12345"
+}
+```
 
-**Response** (201 Created):
+**Fields:**
+- `device_id` (required): Device identifier to retrieve or create guest account
+
+**Response** (201 Created - New Guest):
 ```json
 {
   "user": {
     "id": "uuid-here",
     "email": "guest_uuid@moneys.app",
     "full_name": "Guest User",
-    "is_guest": true
+    "is_guest": true,
+    "device_id": "unique-device-id-12345",
+    "last_logged_in": "2025-10-11T10:00:00.000000Z"
   },
   "token": "3|xxxxxxxxxxxxxxxxxxxx"
 }
 ```
 
+**Response** (200 OK - Existing Guest Retrieved):
+```json
+{
+  "user": {
+    "id": "existing-uuid",
+    "email": "guest_existing@moneys.app",
+    "full_name": "Guest User",
+    "is_guest": true,
+    "device_id": "unique-device-id-12345",
+    "last_logged_in": "2025-10-11T10:15:00.000000Z"
+  },
+  "token": "4|xxxxxxxxxxxxxxxxxxxx",
+  "message": "Existing guest account retrieved"
+}
+```
+
 **cURL Example:**
 ```bash
-curl -X POST http://localhost:8000/api/v1/guest
+curl -X POST http://localhost:8000/api/v1/guest \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: YOUR_API_SECURITY_KEY" \
+  -d '{
+    "device_id": "unique-device-id-12345"
+  }'
 ```
+
+**Use Case:**
+- User opens app for first time → Call `/guest` with device ID
+- App stores token and user data
+- If user reopens app → Call `/guest` again with same device ID → Gets same guest account back
+- When user signs up → Call `/register` with device ID → Guest account upgraded to real account with all data preserved
 
 ---
 
@@ -192,6 +331,8 @@ Lấy thông tin user đang đăng nhập.
   "full_name": "John Doe",
   "avatar_url": null,
   "is_guest": false,
+  "device_id": "unique-device-id-12345",
+  "last_logged_in": "2025-10-11T10:30:00.000000Z",
   "language": "en",
   "currency": "USD",
   "theme": "light",
@@ -206,7 +347,8 @@ Lấy thông tin user đang đăng nhập.
 **cURL Example:**
 ```bash
 curl http://localhost:8000/api/v1/users/me \
-  -H "Authorization: Bearer YOUR_TOKEN"
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "X-API-Key: YOUR_API_SECURITY_KEY"
 ```
 
 ---
@@ -719,15 +861,36 @@ curl -X PATCH http://localhost:8000/api/v1/notifications/uuid-here/read \
 
 ## 📋 Common Patterns
 
-### Authorization Header
-Tất cả endpoints có 🔒 cần header:
+### Required Headers
+
+**All endpoints require:**
+```
+X-API-Key: YOUR_API_SECURITY_KEY
+```
+
+**Protected endpoints (🔒) also require:**
 ```
 Authorization: Bearer YOUR_TOKEN_HERE
 ```
 
+**Example:**
+```bash
+curl http://localhost:8000/api/v1/users/me \
+  -H "X-API-Key: YOUR_API_SECURITY_KEY" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
 ### Error Responses
 
-**401 Unauthorized:**
+**401 Unauthorized (Missing/Invalid API Key):**
+```json
+{
+  "error": "Unauthorized",
+  "message": "Invalid or missing API security key."
+}
+```
+
+**401 Unauthorized (Missing/Invalid Token):**
 ```json
 {
   "message": "Unauthenticated."
@@ -767,15 +930,32 @@ Authorization: Bearer YOUR_TOKEN_HERE
 ### Full Workflow Example:
 
 ```bash
-# 1. Register
-TOKEN=$(curl -s -X POST http://localhost:8000/api/v1/register \
+# Set API key (get from backend admin)
+API_KEY="YOUR_API_SECURITY_KEY"
+
+# 1. Create guest account
+GUEST_TOKEN=$(curl -s -X POST http://localhost:8000/api/v1/guest \
   -H "Content-Type: application/json" \
-  -d '{"email":"test@test.com","password":"password123","full_name":"Test User"}' \
+  -H "X-API-Key: $API_KEY" \
+  -d '{"device_id":"my-device-123"}' \
   | jq -r '.token')
 
-# 2. Create subscription
+# 2. Register real account (upgrades guest)
+TOKEN=$(curl -s -X POST http://localhost:8000/api/v1/register \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: $API_KEY" \
+  -d '{
+    "email":"test@test.com",
+    "password":"password123",
+    "full_name":"Test User",
+    "device_id":"my-device-123"
+  }' \
+  | jq -r '.token')
+
+# 3. Create subscription
 curl -X POST http://localhost:8000/api/v1/subscriptions \
   -H "Authorization: Bearer $TOKEN" \
+  -H "X-API-Key: $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Netflix",
@@ -787,13 +967,15 @@ curl -X POST http://localhost:8000/api/v1/subscriptions \
     "category": "Entertainment"
   }'
 
-# 3. Get stats
+# 4. Get stats
 curl http://localhost:8000/api/v1/subscriptions/stats \
-  -H "Authorization: Bearer $TOKEN"
+  -H "Authorization: Bearer $TOKEN" \
+  -H "X-API-Key: $API_KEY"
 
-# 4. List subscriptions
+# 5. List subscriptions
 curl http://localhost:8000/api/v1/subscriptions \
-  -H "Authorization: Bearer $TOKEN"
+  -H "Authorization: Bearer $TOKEN" \
+  -H "X-API-Key: $API_KEY"
 ```
 
 ---

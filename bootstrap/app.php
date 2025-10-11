@@ -13,7 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
         apiPrefix: 'api',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'api.key' => \App\Http\Middleware\ValidateApiSecurityKey::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

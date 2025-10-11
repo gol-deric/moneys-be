@@ -56,6 +56,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | API Security Key
+    |--------------------------------------------------------------------------
+    |
+    | This key is used to validate API requests from mobile applications.
+    | Requests must include this key in the X-API-Key header to be authorized.
+    |
+    */
+
+    'api_security_key' => env('API_SECURITY_KEY'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |
