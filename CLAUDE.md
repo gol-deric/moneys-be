@@ -4,12 +4,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-MoneyS is an **API-only** user and device management system built with Laravel 12. The system provides RESTful API endpoints for user authentication, registration, and device management.
+MoneyS is an **API-only** user and device management system built with Laravel 12. This application has been refactored from a full-stack system to focus exclusively on providing RESTful API endpoints.
+
+**Current State:**
+- ✅ Pure API backend (no admin panel, no web UI)
+- ✅ User authentication and registration (including guest accounts)
+- ✅ Device management per user
+- ✅ L5-Swagger for API documentation
+- ✅ UUID-based primary keys throughout
 
 **Tech Stack:**
 - Laravel 12
-- Laravel Sanctum (API authentication)
-- L5-Swagger (API documentation)
+- Laravel Sanctum (API token authentication)
+- L5-Swagger (OpenAPI/Swagger documentation)
 - MySQL with UUID primary keys
 
 ## Development Commands
@@ -22,135 +29,174 @@ php artisan key:generate
 php artisan migrate
 ```
 
+**Important:** Set `API_KEY` in `.env` - all API requests require this header.
+
 ### Running Development Server
 ```bash
 php artisan serve
+# API available at: http://localhost:8000
 ```
 
-### Testing
+### Database Operations
 ```bash
-php artisan test                      # Run all tests
-php artisan test --filter UserTest    # Run specific test
-```
-
-### Database
-```bash
-php artisan migrate:fresh             # Reset database
-php artisan migrate                   # Run migrations
-```
-
-### Code Quality
-```bash
-php artisan pint                      # Format code with Laravel Pint
+php artisan migrate           # Run migrations
+php artisan migrate:fresh     # Reset and rebuild database
 ```
 
 ### API Documentation
 ```bash
-php artisan l5-swagger:generate       # Generate Swagger docs
+php artisan l5-swagger:generate
 # View at: http://localhost:8000/api/documentation
 ```
 
-## Architecture & Key Patterns
+### Code Quality
+```bash
+php artisan pint             # Format code
+php artisan test             # Run tests
+```
+
+## Architecture Overview
 
 ### API-Only Application
-This is an API-only application. There is **no admin panel or web UI**. All functionality is accessed via API endpoints.
+This is strictly an API backend. There is **no web UI or admin panel**. The root URL (`/`) returns JSON with API information.
+
+### Two-Table Data Model
+The application uses only 2 primary tables:
+
+**1. users**
+- UUID primary key
+- Supports both regular users (email/password) and guest users (no credentials)
+- Fields: `email`, `password`, `full_name`, `is_guest`, `language`, `currency`, `is_active`, `last_logged_in`
+
+**2. user_devices**
+- UUID primary key and foreign key
+- One user can have multiple devices
+- Fields: `device_id`, `device_name`, `device_type` (android/ios/web), `fcm_token`, `is_active`
 
 ### UUID Primary Keys
-All models use UUID primary keys instead of auto-incrementing integers:
-- `use HasUuids` trait in models
-- `$table->uuid('id')->primary()` in migrations
-- Foreign keys also use UUIDs: `$table->foreignUuid('user_id')`
+All models use UUIDs instead of auto-incrementing integers:
+- Models use `HasUuids` trait
+- Migrations use `$table->uuid('id')->primary()`
+- Foreign keys use `$table->foreignUuid('user_id')`
 
-### Authentication System
-- **API**: Laravel Sanctum with token-based authentication
-- **API Key**: All API requests require `X-API-KEY` header (configured in `.env`)
-- **Guest Accounts**: Users can register as guests (`is_guest = true`) without email/password
-- **Regular Accounts**: Users register with email + password
+### Authentication Flow
 
-### Model Structure
-Key models and their relationships:
-- **User**: HasMany UserDevices
-  - Fields: email, password, full_name, is_guest, language, currency, is_active, last_logged_in
-- **UserDevice**: BelongsTo User
-  - Fields: device_id, device_name, device_type (android/ios/web), fcm_token, is_active
+**Two-Layer Authentication:**
+1. **API Key** (all requests): Header `X-API-KEY` validated by `ValidateApiSecurityKey` middleware
+2. **User Token** (protected routes): Sanctum bearer token for authenticated users
 
-### API Endpoints
+**Guest vs Regular Users:**
+- Guest users: `is_guest=true`, no email/password required, identified by `device_id`
+- Regular users: `is_guest=false`, require email/password
 
-**Base URL:** `/api/v1`
-**Required Header:** `X-API-KEY: {your-api-key}`
+### Request/Response Pattern
 
-**Public Routes:**
-- `POST /user/register` - Register new user (guest or regular) with device
-- `POST /user/login` - Login with email/password
+**Base Controller** (`app/Http/Controllers/Api/Controller.php`) provides response helpers:
+```php
+$this->success($data, $message, $code)
+$this->error($message, $code, $errors)
+```
+
+**Standard Response Format:**
+```json
+{
+  "success": true/false,
+  "message": "...",
+  "data": {...} // or "errors": {...}
+}
+```
+
+### Form Requests
+All API inputs validated via Form Requests in `app/Http/Requests/`:
+- `RegisterRequest` - validates guest vs regular registration differently
+- `LoginRequest`
+- `ForgotPasswordRequest`
+- `ResetPasswordRequest`
+
+## API Endpoints
+
+**Base:** `/api/v1`
+**Required Header:** `X-API-KEY: {value-from-env}`
+
+### Public Routes
+- `POST /user/register` - Create user (guest or regular) + device
+- `POST /user/login` - Authenticate with email/password
 - `POST /user/forgot-password` - Request password reset
-- `POST /user/reset-password` - Reset password with token
+- `POST /user/reset-password` - Reset with token
+- `GET /health` - Health check
 
-**Protected Routes** (require Bearer token):
+### Protected Routes (require Bearer token)
 - `GET /user/me` - Get authenticated user info
 
-**System:**
-- `GET /health` - API health check
-
-### Database Tables
-Only 2 main tables:
-1. **users** - User data
-2. **user_devices** - Device data
-
-Plus Laravel system tables (cache, jobs, sessions, migrations, personal_access_tokens, password_reset_tokens)
-
-## Important Configuration Notes
+## Key Configuration
 
 ### Environment Variables
-Required `.env` variables:
+Required in `.env`:
 ```
-APP_NAME=MoneyS
+API_KEY=your-secret-api-key-here  # Required for all API requests
 DB_DATABASE=moneys
-API_KEY=your-secret-api-key-here
 ```
 
-### API Key Authentication
-- All API requests require `X-API-KEY` header
-- Configured via `API_KEY` in `.env`
-- Validated by `ValidateApiSecurityKey` middleware
-
-## Common Patterns & Conventions
-
-### API Response Format
-All API responses follow this format:
-```json
-{
-  "success": true,
-  "message": "Success message",
-  "data": {...}
-}
+Optional for password reset emails:
+```
+MAIL_MAILER=smtp
+MAIL_HOST=...
+MAIL_PORT=587
 ```
 
-Error response:
-```json
-{
-  "success": false,
-  "message": "Error message",
-  "errors": {...}
-}
-```
+### Middleware
+- `api.key` - Validates `X-API-KEY` header (applied to all `/api/v1` routes)
+- `auth:sanctum` - Validates bearer token (applied to protected routes)
 
-### Validation
-- Input validation via Form Requests
-- Email uniqueness enforced (except for guest accounts where email is nullable)
+## Important Implementation Notes
 
 ### Password Reset
-- Uses Laravel's built-in password reset functionality
+Uses Laravel's built-in password reset:
+- Token stored in `password_reset_tokens` table
 - Requires email configuration in `.env`
+- Uses `Password` facade for token generation/validation
 
-## Swagger Documentation
+### Swagger Documentation
+- Main API info: `app/Http/Controllers/Api/Controller.php`
+- Schemas: `app/Http/Controllers/Api/Schemas.php`
+- Endpoint annotations: In controller methods using `@OA\` tags
+- Security schemes: Both `apiKey` (X-API-KEY) and `sanctum` (Bearer) defined
 
-- Annotations in controllers using `@OA\` tags
-- Schemas defined in `app/Http/Controllers/Api/Schemas.php`
-- Base controller with Swagger info: `app/Http/Controllers/Api/Controller.php`
-- Generate docs: `php artisan l5-swagger:generate`
-- View at: http://localhost:8000/api/documentation
+### Model Relationships
+```php
+User::devices()       // HasMany UserDevice
+UserDevice::user()    // BelongsTo User
+```
 
-## Testing Notes
+### Soft Deletes
+User model uses soft deletes - deleted users aren't immediately removed from database.
 
-- PHPUnit configured for Laravel 12
-- Test structure follows Laravel conventions: `tests/Feature/` and `tests/Unit/`
+## Migrations Structure
+
+Current migrations (in order):
+1. `create_users_table` - Base Laravel users
+2. `create_cache_table` - Laravel cache
+3. `create_jobs_table` - Laravel queue jobs
+4. `create_personal_access_tokens_table` - Sanctum tokens
+5. `update_personal_access_tokens_for_uuid` - Convert to UUID foreign keys
+6. `create_users_and_devices_tables_v2` - Main schema (modifies users, creates user_devices)
+7. `drop_unused_tables` - Cleanup from previous full-stack version
+
+## What Was Removed
+
+This codebase was refactored from a full-stack application. The following were removed:
+- ❌ Filament admin panel and all resources
+- ❌ Subscription management features
+- ❌ Firebase Cloud Messaging service
+- ❌ Payment plans and billing
+- ❌ Notification system
+- ❌ Background jobs and scheduled tasks
+- ❌ Laravel Horizon
+
+The README.md mentions these features but they no longer exist in the codebase.
+
+## Testing
+
+PHPUnit configured for Laravel 12. Test files go in:
+- `tests/Feature/` - Integration tests
+- `tests/Unit/` - Unit tests

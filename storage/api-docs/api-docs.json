@@ -10,7 +10,7 @@
     },
     "servers": [
         {
-            "url": "http://localhost/8000",
+            "url": "http://moneys.local",
             "description": "API Server"
         }
     ],
@@ -476,6 +476,268 @@
                     }
                 ]
             }
+        },
+        "/api/v1/subscription": {
+            "get": {
+                "tags": [
+                    "Subscriptions"
+                ],
+                "summary": "Get all subscriptions for authenticated user",
+                "operationId": "d77fb30d9af76df92c5e0d9714e92f9b",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Subscriptions retrieved successfully"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Subscription"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "apiKey": [],
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Subscriptions"
+                ],
+                "summary": "Create a new subscription",
+                "operationId": "41b19f4f9feec52cdd17abe986cb5bdf",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateSubscriptionRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Subscription created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Subscription created successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Subscription"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "apiKey": [],
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/subscription/{subscription_id}": {
+            "get": {
+                "tags": [
+                    "Subscriptions"
+                ],
+                "summary": "Get a specific subscription",
+                "operationId": "bf7c446c6c478ca50a0323cc4414fe81",
+                "parameters": [
+                    {
+                        "name": "subscription_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Subscription retrieved successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Subscription"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Subscription not found"
+                    }
+                },
+                "security": [
+                    {
+                        "apiKey": [],
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Subscriptions"
+                ],
+                "summary": "Update a subscription",
+                "operationId": "b29838c9e7b6736a3b6658ed6885eccd",
+                "parameters": [
+                    {
+                        "name": "subscription_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateSubscriptionRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Subscription updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Subscription updated successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Subscription"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Subscription not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "apiKey": [],
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Subscriptions"
+                ],
+                "summary": "Delete a subscription",
+                "operationId": "9d221e5eb7154a954048c0e97c79e335",
+                "parameters": [
+                    {
+                        "name": "subscription_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Subscription deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Subscription deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Subscription not found"
+                    }
+                },
+                "security": [
+                    {
+                        "apiKey": [],
+                        "sanctum": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -569,6 +831,200 @@
                     }
                 },
                 "type": "object"
+            },
+            "Subscription": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "9d4e8f72-8b7a-4c5e-a3d2-1f9b8c6d5e4a"
+                    },
+                    "user_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "9d4e8f72-8b7a-4c5e-a3d2-1f9b8c6d5e4a"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Netflix Premium"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Monthly streaming subscription",
+                        "nullable": true
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 15.99
+                    },
+                    "currency": {
+                        "type": "string",
+                        "example": "USD"
+                    },
+                    "billing_cycle": {
+                        "type": "string",
+                        "enum": [
+                            "monthly",
+                            "yearly",
+                            "weekly",
+                            "daily"
+                        ],
+                        "example": "monthly"
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-01-01"
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-12-31",
+                        "nullable": true
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "active",
+                            "cancelled",
+                            "expired",
+                            "pending"
+                        ],
+                        "example": "active"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "CreateSubscriptionRequest": {
+                "required": [
+                    "name",
+                    "price",
+                    "billing_cycle",
+                    "start_date"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Netflix Premium"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Monthly streaming subscription",
+                        "nullable": true
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 15.99
+                    },
+                    "currency": {
+                        "type": "string",
+                        "example": "USD",
+                        "nullable": true
+                    },
+                    "billing_cycle": {
+                        "type": "string",
+                        "enum": [
+                            "monthly",
+                            "yearly",
+                            "weekly",
+                            "daily"
+                        ],
+                        "example": "monthly"
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-01-01"
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-12-31",
+                        "nullable": true
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "active",
+                            "cancelled",
+                            "expired",
+                            "pending"
+                        ],
+                        "example": "active",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateSubscriptionRequest": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Netflix Premium",
+                        "nullable": true
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Monthly streaming subscription",
+                        "nullable": true
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 15.99,
+                        "nullable": true
+                    },
+                    "currency": {
+                        "type": "string",
+                        "example": "USD",
+                        "nullable": true
+                    },
+                    "billing_cycle": {
+                        "type": "string",
+                        "enum": [
+                            "monthly",
+                            "yearly",
+                            "weekly",
+                            "daily"
+                        ],
+                        "example": "monthly",
+                        "nullable": true
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-01-01",
+                        "nullable": true
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-12-31",
+                        "nullable": true
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "active",
+                            "cancelled",
+                            "expired",
+                            "pending"
+                        ],
+                        "example": "active",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
             }
         },
         "securitySchemes": {
@@ -590,6 +1046,10 @@
         {
             "name": "Authentication",
             "description": "Authentication endpoints"
+        },
+        {
+            "name": "Subscriptions",
+            "description": "Subscription management endpoints"
         },
         {
             "name": "System",

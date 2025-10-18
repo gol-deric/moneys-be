@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\HealthController;
+use App\Http\Controllers\Api\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,5 +26,12 @@ Route::prefix('v1')->middleware('api.key')->group(function () {
     // Protected routes (require authentication)
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/user/me', [AuthController::class, 'me']);
+
+        // Subscription routes
+        Route::get('/subscription', [SubscriptionController::class, 'index']);
+        Route::post('/subscription', [SubscriptionController::class, 'store']);
+        Route::get('/subscription/{id}', [SubscriptionController::class, 'show']);
+        Route::put('/subscription/{id}', [SubscriptionController::class, 'update']);
+        Route::delete('/subscription/{id}', [SubscriptionController::class, 'destroy']);
     });
 });
