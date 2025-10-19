@@ -406,6 +406,152 @@
                 ]
             }
         },
+        "/api/v1/user/device": {
+            "post": {
+                "tags": [
+                    "Devices"
+                ],
+                "summary": "Add new device",
+                "description": "Register a new device for authenticated user",
+                "operationId": "362b071fa4cc528ca726d7aaf4300cfb",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "device_id",
+                                    "device_name",
+                                    "device_type"
+                                ],
+                                "properties": {
+                                    "device_id": {
+                                        "type": "string",
+                                        "example": "device-uuid-456"
+                                    },
+                                    "device_name": {
+                                        "type": "string",
+                                        "example": "iPhone 13 Pro"
+                                    },
+                                    "device_type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "android",
+                                            "ios",
+                                            "web"
+                                        ],
+                                        "example": "ios"
+                                    },
+                                    "fcm_token": {
+                                        "description": "Optional FCM token",
+                                        "type": "string",
+                                        "example": "fcm-token-456"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Device added successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Device added successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/UserDevice"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiKey": []
+                    },
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/user/device/{device_id}": {
+            "delete": {
+                "tags": [
+                    "Devices"
+                ],
+                "summary": "Remove device",
+                "description": "Delete a device for authenticated user (logout action)",
+                "operationId": "fb2646dd29d651462b473caf1a434fc2",
+                "parameters": [
+                    {
+                        "name": "device_id",
+                        "in": "path",
+                        "description": "Device ID to remove",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "device-uuid-456"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Device removed successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Device removed successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Device not found"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiKey": []
+                    },
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/health": {
             "get": {
                 "tags": [
@@ -1050,6 +1196,10 @@
         {
             "name": "Subscriptions",
             "description": "Subscription management endpoints"
+        },
+        {
+            "name": "Devices",
+            "description": "Devices"
         },
         {
             "name": "System",

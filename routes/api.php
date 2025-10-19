@@ -27,6 +27,10 @@ Route::prefix('v1')->middleware('api.key')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/user/me', [AuthController::class, 'me']);
 
+        // Device management routes
+        Route::post('/user/device', [AuthController::class, 'addDevice']);
+        Route::delete('/user/device/{device_id}', [AuthController::class, 'removeDevice']);
+
         // Subscription routes
         Route::get('/subscription', [SubscriptionController::class, 'index']);
         Route::post('/subscription', [SubscriptionController::class, 'store']);

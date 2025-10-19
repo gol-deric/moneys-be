@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\AddDeviceRequest;
 use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
@@ -263,5 +264,122 @@ class AuthController extends Controller
     public function me(): JsonResponse
     {
         return $this->success(Auth::user());
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/v1/user/device",
+     *     summary="Add new device",
+     *     description="Register a new device for authenticated user",
+     *     tags={"Devices"},
+     *     security={{"apiKey": {}}, {"sanctum": {}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"device_id", "device_name", "device_type"},
+     *             @OA\Property(property="device_id", type="string", example="device-uuid-456"),
+     *             @OA\Property(property="device_name", type="string", example="iPhone 13 Pro"),
+     *             @OA\Property(property="device_type", type="string", enum={"android", "ios", "web"}, example="ios"),
+     *             @OA\Property(property="fcm_token", type="string", example="fcm-token-456", description="Optional FCM token")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Device added successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Device added successfully"),
+     *             @OA\Property(property="data", ref="#/components/schemas/UserDevice")
+     *         )
+     *     ),
+     *     @OA\Response(response=422, description="Validation error"),
+     *     @OA\Response(response=401, description="Unauthenticated")
+     * )
+     */
+    public function addDevice(AddDeviceRequest $request): JsonResponse
+    {
+        try {
+            $user = Auth::user();
+
+            // Check if device already exists for this user
+            $existingDevice = UserDevice::where('user_id', $user->id)
+                ->where('device_id', $request->device_id)
+                ->first();
+
+            if ($existingDevice) {
+                // Update existing device
+                $existingDevice->update([
+                    'device_name' => $request->device_name,
+                    'device_type' => $request->device_type,
+                    'fcm_token' => $request->fcm_token,
+                    'is_active' => true,
+                ]);
+
+                return $this->success($existingDevice, 'Device updated successfully');
+            }
+
+            // Create new device
+            $device = UserDevice::create([
+                'user_id' => $user->id,
+                'device_id' => $request->device_id,
+                'device_name' => $request->device_name,
+                'device_type' => $request->device_type,
+                'fcm_token' => $request->fcm_token,
+                'is_active' => true,
+            ]);
+
+            return $this->success($device, 'Device added successfully', 201);
+
+        } catch (\Exception $e) {
+            return $this->error('Failed to add device: ' . $e->getMessage(), 500);
+        }
+    }
+
+    /**
+     * @OA\Delete(
+     *     path="/api/v1/user/device/{device_id}",
+     *     summary="Remove device",
+     *     description="Delete a device for authenticated user (logout action)",
+     *     tags={"Devices"},
+     *     security={{"apiKey": {}}, {"sanctum": {}}},
+     *     @OA\Parameter(
+     *         name="device_id",
+     *         in="path",
+     *         required=true,
+     *         description="Device ID to remove",
+     *         @OA\Schema(type="string", example="device-uuid-456")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Device removed successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Device removed successfully")
+     *         )
+     *     ),
+     *     @OA\Response(response=404, description="Device not found"),
+     *     @OA\Response(response=401, description="Unauthenticated")
+     * )
+     */
+    public function removeDevice(string $device_id): JsonResponse
+    {
+        try {
+            $user = Auth::user();
+
+            $device = UserDevice::where('user_id', $user->id)
+                ->where('device_id', $device_id)
+                ->first();
+
+            if (!$device) {
+                return $this->error('Device not found', 404);
+            }
+
+            $device->delete();
+
+            return $this->success(null, 'Device removed successfully');
+
+        } catch (\Exception $e) {
+            return $this->error('Failed to remove device: ' . $e->getMessage(), 500);
+        }
     }
 }
