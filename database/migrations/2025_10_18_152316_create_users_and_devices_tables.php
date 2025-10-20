@@ -29,6 +29,7 @@ return new class extends Migration
                     'subscription_tier',
                     'subscription_expires_at',
                     'device_id',
+                    'is_guest',
                 ]);
             }
         });
