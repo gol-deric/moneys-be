@@ -45,7 +45,7 @@ return new class extends Migration
         Schema::create('user_devices', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('device_id')->unique();
+            $table->string('device_id');
             $table->string('device_name')->nullable();
             $table->string('device_type')->nullable(); // android, ios, web
             $table->text('fcm_token')->nullable();
