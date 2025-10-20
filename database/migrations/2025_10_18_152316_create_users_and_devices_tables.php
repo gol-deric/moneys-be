@@ -14,49 +14,36 @@ return new class extends Migration
         // Drop old tables if exist
         Schema::dropIfExists('device_tokens');
         Schema::dropIfExists('user_devices');
+        Schema::dropIfExists('sessions');
 
-        // Recreate users table with new schema
-        Schema::table('users', function (Blueprint $table) {
-            // Drop columns we don't need anymore
-            if (Schema::hasColumn('users', 'avatar_url')) {
-                $table->dropColumn([
-                    'avatar_url',
-                    'is_admin',
-                    'fcm_token',
-                    'theme',
-                    'notifications_enabled',
-                    'email_notifications',
-                    'subscription_tier',
-                    'subscription_expires_at',
-                    'device_id',
-                ]);
-            }
+        // Drop and recreate users table with UUID
+        Schema::dropIfExists('users');
+
+        Schema::create('users', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('name');
+            $table->string('email')->nullable()->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password')->nullable();
+            $table->string('full_name')->nullable();
+            $table->boolean('is_guest')->default(false);
+            $table->boolean('is_active')->default(true);
+            $table->string('language')->default('en');
+            $table->string('currency')->default('USD');
+            $table->timestamp('last_logged_in')->nullable();
+            $table->rememberToken();
+            $table->softDeletes();
+            $table->timestamps();
         });
 
-        Schema::table('users', function (Blueprint $table) {
-            // Add new columns according to schema
-            if (!Schema::hasColumn('users', 'full_name')) {
-                $table->string('full_name')->nullable()->after('password');
-            }
-            if (!Schema::hasColumn('users', 'is_guest')) {
-                $table->boolean('is_guest')->default(false)->after('full_name');
-            }
-            if (!Schema::hasColumn('users', 'is_active')) {
-                $table->boolean('is_active')->default(true)->after('is_guest');
-            }
-            if (!Schema::hasColumn('users', 'language')) {
-                $table->string('language')->default('en')->after('is_active');
-            }
-            if (!Schema::hasColumn('users', 'currency')) {
-                $table->string('currency')->default('USD')->after('language');
-            }
-            if (!Schema::hasColumn('users', 'last_logged_in')) {
-                $table->timestamp('last_logged_in')->nullable()->after('currency');
-            }
-
-            // Make email nullable for guest accounts
-            $table->string('email')->nullable()->change();
-            $table->string('password')->nullable()->change();
+        // Recreate sessions table with UUID foreign key
+        Schema::create('sessions', function (Blueprint $table) {
+            $table->string('id')->primary();
+            $table->foreignUuid('user_id')->nullable()->index();
+            $table->string('ip_address', 45)->nullable();
+            $table->text('user_agent')->nullable();
+            $table->longText('payload');
+            $table->integer('last_activity')->index();
         });
 
         // Create user_devices table
@@ -80,16 +67,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('user_devices');
-
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn([
-                'full_name',
-                'is_guest',
-                'is_active',
-                'language',
-                'currency',
-                'last_logged_in',
-            ]);
-        });
+        Schema::dropIfExists('sessions');
+        Schema::dropIfExists('users');
     }
 };
