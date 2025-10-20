@@ -29,17 +29,34 @@ return new class extends Migration
                     'subscription_tier',
                     'subscription_expires_at',
                     'device_id',
-                    'is_guest',
                 ]);
             }
         });
 
         Schema::table('users', function (Blueprint $table) {
             // Add new columns according to schema
-            $table->boolean('is_active')->default(true)->after('is_guest');
+            if (!Schema::hasColumn('users', 'full_name')) {
+                $table->string('full_name')->nullable()->after('password');
+            }
+            if (!Schema::hasColumn('users', 'is_guest')) {
+                $table->boolean('is_guest')->default(false)->after('full_name');
+            }
+            if (!Schema::hasColumn('users', 'is_active')) {
+                $table->boolean('is_active')->default(true)->after('is_guest');
+            }
+            if (!Schema::hasColumn('users', 'language')) {
+                $table->string('language')->default('en')->after('is_active');
+            }
+            if (!Schema::hasColumn('users', 'currency')) {
+                $table->string('currency')->default('USD')->after('language');
+            }
+            if (!Schema::hasColumn('users', 'last_logged_in')) {
+                $table->timestamp('last_logged_in')->nullable()->after('currency');
+            }
 
             // Make email nullable for guest accounts
             $table->string('email')->nullable()->change();
+            $table->string('password')->nullable()->change();
         });
 
         // Create user_devices table
@@ -65,7 +82,14 @@ return new class extends Migration
         Schema::dropIfExists('user_devices');
 
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['is_active']);
+            $table->dropColumn([
+                'full_name',
+                'is_guest',
+                'is_active',
+                'language',
+                'currency',
+                'last_logged_in',
+            ]);
         });
     }
 };
