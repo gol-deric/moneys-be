@@ -30,6 +30,7 @@ class CreateSubscriptionRequest extends FormRequest
             'start_date' => ['required', 'date'],
             'end_date' => ['nullable', 'date', 'after:start_date'],
             'status' => ['nullable', 'in:active,cancelled,expired,pending'],
+            'app_icon' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

@@ -1039,6 +1039,12 @@
                         ],
                         "example": "active"
                     },
+                    "app_icon": {
+                        "description": "URL or path to app icon from subscriptions.json",
+                        "type": "string",
+                        "example": "https://moneys.io.vn/assets/icons/netflix.png",
+                        "nullable": true
+                    },
                     "created_at": {
                         "type": "string",
                         "format": "date-time"
@@ -1108,6 +1114,12 @@
                         ],
                         "example": "active",
                         "nullable": true
+                    },
+                    "app_icon": {
+                        "description": "URL or path to app icon",
+                        "type": "string",
+                        "example": "https://moneys.io.vn/assets/icons/netflix.png",
+                        "nullable": true
                     }
                 },
                 "type": "object"
@@ -1167,6 +1179,12 @@
                             "pending"
                         ],
                         "example": "active",
+                        "nullable": true
+                    },
+                    "app_icon": {
+                        "description": "URL or path to app icon",
+                        "type": "string",
+                        "example": "https://moneys.io.vn/assets/icons/netflix.png",
                         "nullable": true
                     }
                 },

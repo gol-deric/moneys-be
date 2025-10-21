@@ -10,6 +10,7 @@ MoneyS is an **API-only** user and device management system built with Laravel 1
 - ✅ Pure API backend (no admin panel, no web UI)
 - ✅ User authentication and registration (including guest accounts)
 - ✅ Device management per user
+- ✅ Subscription management per user
 - ✅ L5-Swagger for API documentation
 - ✅ UUID-based primary keys throughout
 
@@ -60,8 +61,8 @@ php artisan test             # Run tests
 ### API-Only Application
 This is strictly an API backend. There is **no web UI or admin panel**. The root URL (`/`) returns JSON with API information.
 
-### Two-Table Data Model
-The application uses only 2 primary tables:
+### Data Model
+The application uses the following primary tables:
 
 **1. users**
 - UUID primary key
@@ -72,6 +73,11 @@ The application uses only 2 primary tables:
 - UUID primary key and foreign key
 - One user can have multiple devices
 - Fields: `device_id`, `device_name`, `device_type` (android/ios/web), `fcm_token`, `is_active`
+
+**3. subscriptions**
+- UUID primary key and foreign key
+- Tracks user subscriptions
+- Fields: `user_id`, `name`, `description`, `price`, `currency`, `billing_cycle`, `start_date`, `end_date`, `status`
 
 ### UUID Primary Keys
 All models use UUIDs instead of auto-incrementing integers:
@@ -112,6 +118,8 @@ All API inputs validated via Form Requests in `app/Http/Requests/`:
 - `LoginRequest`
 - `ForgotPasswordRequest`
 - `ResetPasswordRequest`
+- `CreateSubscriptionRequest` - validates subscription creation
+- `UpdateSubscriptionRequest` - validates subscription updates
 
 ## API Endpoints
 
@@ -127,6 +135,15 @@ All API inputs validated via Form Requests in `app/Http/Requests/`:
 
 ### Protected Routes (require Bearer token)
 - `GET /user/me` - Get authenticated user info
+- `POST /user/device` - Add a new device for the user
+- `DELETE /user/device/{device_id}` - Remove a device
+
+**Subscription Management:**
+- `GET /subscription` - Get all subscriptions for authenticated user
+- `POST /subscription` - Create a new subscription
+- `GET /subscription/{id}` - Get a specific subscription
+- `PUT /subscription/{id}` - Update a subscription
+- `DELETE /subscription/{id}` - Delete a subscription
 
 ## Key Configuration
 
@@ -164,8 +181,10 @@ Uses Laravel's built-in password reset:
 
 ### Model Relationships
 ```php
-User::devices()       // HasMany UserDevice
-UserDevice::user()    // BelongsTo User
+User::devices()           // HasMany UserDevice
+User::subscriptions()     // HasMany Subscription
+UserDevice::user()        // BelongsTo User
+Subscription::user()      // BelongsTo User
 ```
 
 ### Soft Deletes
@@ -181,19 +200,20 @@ Current migrations (in order):
 5. `update_personal_access_tokens_for_uuid` - Convert to UUID foreign keys
 6. `create_users_and_devices_tables_v2` - Main schema (modifies users, creates user_devices)
 7. `drop_unused_tables` - Cleanup from previous full-stack version
+8. `create_subscriptions_table` - Subscription management
+9. `create_admin_users_table` - Admin users (if Filament is still in use)
 
 ## What Was Removed
 
-This codebase was refactored from a full-stack application. The following were removed:
-- ❌ Filament admin panel and all resources
-- ❌ Subscription management features
+This codebase was refactored from a full-stack application. The following were removed or are being removed:
+- ⚠️ Filament admin panel (partially removed - some resources still exist)
 - ❌ Firebase Cloud Messaging service
 - ❌ Payment plans and billing
 - ❌ Notification system
 - ❌ Background jobs and scheduled tasks
 - ❌ Laravel Horizon
 
-The README.md mentions these features but they no longer exist in the codebase.
+**Note:** Subscription management is **ACTIVE** - the API endpoints and database tables exist and are functional. The README.md may mention removed features that no longer exist.
 
 ## Testing
 

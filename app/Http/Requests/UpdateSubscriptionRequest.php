@@ -30,6 +30,7 @@ class UpdateSubscriptionRequest extends FormRequest
             'start_date' => ['sometimes', 'date'],
             'end_date' => ['nullable', 'date', 'after:start_date'],
             'status' => ['sometimes', 'in:active,cancelled,expired,pending'],
+            'app_icon' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

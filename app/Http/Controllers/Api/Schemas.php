@@ -45,6 +45,7 @@ namespace App\Http\Controllers\Api;
  *     @OA\Property(property="start_date", type="string", format="date", example="2025-01-01"),
  *     @OA\Property(property="end_date", type="string", format="date", example="2025-12-31", nullable=true),
  *     @OA\Property(property="status", type="string", enum={"active", "cancelled", "expired", "pending"}, example="active"),
+ *     @OA\Property(property="app_icon", type="string", example="https://moneys.io.vn/assets/icons/netflix.png", nullable=true, description="URL or path to app icon from subscriptions.json"),
  *     @OA\Property(property="created_at", type="string", format="date-time"),
  *     @OA\Property(property="updated_at", type="string", format="date-time")
  * )
@@ -60,7 +61,8 @@ namespace App\Http\Controllers\Api;
  *     @OA\Property(property="billing_cycle", type="string", enum={"monthly", "yearly", "weekly", "daily"}, example="monthly"),
  *     @OA\Property(property="start_date", type="string", format="date", example="2025-01-01"),
  *     @OA\Property(property="end_date", type="string", format="date", example="2025-12-31", nullable=true),
- *     @OA\Property(property="status", type="string", enum={"active", "cancelled", "expired", "pending"}, example="active", nullable=true)
+ *     @OA\Property(property="status", type="string", enum={"active", "cancelled", "expired", "pending"}, example="active", nullable=true),
+ *     @OA\Property(property="app_icon", type="string", example="https://moneys.io.vn/assets/icons/netflix.png", nullable=true, description="URL or path to app icon")
  * )
  *
  * @OA\Schema(
@@ -73,7 +75,8 @@ namespace App\Http\Controllers\Api;
  *     @OA\Property(property="billing_cycle", type="string", enum={"monthly", "yearly", "weekly", "daily"}, example="monthly", nullable=true),
  *     @OA\Property(property="start_date", type="string", format="date", example="2025-01-01", nullable=true),
  *     @OA\Property(property="end_date", type="string", format="date", example="2025-12-31", nullable=true),
- *     @OA\Property(property="status", type="string", enum={"active", "cancelled", "expired", "pending"}, example="active", nullable=true)
+ *     @OA\Property(property="status", type="string", enum={"active", "cancelled", "expired", "pending"}, example="active", nullable=true),
+ *     @OA\Property(property="app_icon", type="string", example="https://moneys.io.vn/assets/icons/netflix.png", nullable=true, description="URL or path to app icon")
  * )
  */
 class Schemas

@@ -15,13 +15,19 @@ class Authenticate
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!auth('sanctum')->check()) {
+        // Authenticate using Sanctum guard
+        $user = auth('sanctum')->user();
+
+        if (!$user) {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthenticated',
                 'errors' => null,
             ], 401);
         }
+
+        // Set the user for the default guard so auth()->user() works
+        auth()->setUser($user);
 
         return $next($request);
     }

@@ -32,7 +32,13 @@ class SubscriptionController extends Controller
      */
     public function index(): JsonResponse
     {
-        $subscriptions = auth()->user()->subscriptions()->get();
+        $user = auth()->user();
+
+        if (! $user) {
+            return $this->error('Unauthenticated. Please provide a valid Bearer token.', 401);
+        }
+
+        $subscriptions = $user->subscriptions()->get();
 
         return $this->success($subscriptions, 'Subscriptions retrieved successfully');
     }
@@ -64,7 +70,13 @@ class SubscriptionController extends Controller
      */
     public function store(CreateSubscriptionRequest $request): JsonResponse
     {
-        $subscription = auth()->user()->subscriptions()->create($request->validated());
+        $user = auth()->user();
+
+        if (! $user) {
+            return $this->error('Unauthenticated. Please provide a valid Bearer token.', 401);
+        }
+
+        $subscription = $user->subscriptions()->create($request->validated());
 
         return $this->success($subscription, 'Subscription created successfully', 201);
     }
@@ -98,7 +110,13 @@ class SubscriptionController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        $subscription = auth()->user()->subscriptions()->findOrFail($id);
+        $user = auth()->user();
+
+        if (! $user) {
+            return $this->error('Unauthenticated. Please provide a valid Bearer token.', 401);
+        }
+
+        $subscription = $user->subscriptions()->findOrFail($id);
 
         return $this->success($subscription, 'Subscription retrieved successfully');
     }
@@ -140,7 +158,13 @@ class SubscriptionController extends Controller
      */
     public function update(UpdateSubscriptionRequest $request, string $id): JsonResponse
     {
-        $subscription = auth()->user()->subscriptions()->findOrFail($id);
+        $user = auth()->user();
+
+        if (! $user) {
+            return $this->error('Unauthenticated. Please provide a valid Bearer token.', 401);
+        }
+
+        $subscription = $user->subscriptions()->findOrFail($id);
         $subscription->update($request->validated());
 
         return $this->success($subscription, 'Subscription updated successfully');
@@ -174,7 +198,13 @@ class SubscriptionController extends Controller
      */
     public function destroy(string $id): JsonResponse
     {
-        $subscription = auth()->user()->subscriptions()->findOrFail($id);
+        $user = auth()->user();
+
+        if (! $user) {
+            return $this->error('Unauthenticated. Please provide a valid Bearer token.', 401);
+        }
+
+        $subscription = $user->subscriptions()->findOrFail($id);
         $subscription->delete();
 
         return $this->success(null, 'Subscription deleted successfully');
